@@ -1,0 +1,10 @@
+G:\GameHelper-Release-v5.1.6\ExileApi-Compiled-3.24.3.1\ExileApi-Compiled-3.26.0.0.0\Plugins\Temp\HighlightMapEnchants\HighlightMapEnchants.deps.json
+G:\GameHelper-Release-v5.1.6\ExileApi-Compiled-3.24.3.1\ExileApi-Compiled-3.26.0.0.0\Plugins\Temp\HighlightMapEnchants\HighlightMapEnchants.dll
+G:\GameHelper-Release-v5.1.6\ExileApi-Compiled-3.24.3.1\ExileApi-Compiled-3.26.0.0.0\Plugins\Source\HighlightMapEnchants\obj\Debug\net8.0-windows\win-x64\HighlightMapEnchants.csproj.AssemblyReference.cache
+G:\GameHelper-Release-v5.1.6\ExileApi-Compiled-3.24.3.1\ExileApi-Compiled-3.26.0.0.0\Plugins\Source\HighlightMapEnchants\obj\Debug\net8.0-windows\win-x64\HighlightMapEnchants.GeneratedMSBuildEditorConfig.editorconfig
+G:\GameHelper-Release-v5.1.6\ExileApi-Compiled-3.24.3.1\ExileApi-Compiled-3.26.0.0.0\Plugins\Source\HighlightMapEnchants\obj\Debug\net8.0-windows\win-x64\HighlightMapEnchants.AssemblyInfoInputs.cache
+G:\GameHelper-Release-v5.1.6\ExileApi-Compiled-3.24.3.1\ExileApi-Compiled-3.26.0.0.0\Plugins\Source\HighlightMapEnchants\obj\Debug\net8.0-windows\win-x64\HighlightMapEnchants.AssemblyInfo.cs
+G:\GameHelper-Release-v5.1.6\ExileApi-Compiled-3.24.3.1\ExileApi-Compiled-3.26.0.0.0\Plugins\Source\HighlightMapEnchants\obj\Debug\net8.0-windows\win-x64\HighlightMapEnchants.csproj.CoreCompileInputs.cache
+G:\GameHelper-Release-v5.1.6\ExileApi-Compiled-3.24.3.1\ExileApi-Compiled-3.26.0.0.0\Plugins\Source\HighlightMapEnchants\obj\Debug\net8.0-windows\win-x64\HighlightMapEnchants.dll
+G:\GameHelper-Release-v5.1.6\ExileApi-Compiled-3.24.3.1\ExileApi-Compiled-3.26.0.0.0\Plugins\Source\HighlightMapEnchants\obj\Debug\net8.0-windows\win-x64\refint\HighlightMapEnchants.dll
+G:\GameHelper-Release-v5.1.6\ExileApi-Compiled-3.24.3.1\ExileApi-Compiled-3.26.0.0.0\Plugins\Source\HighlightMapEnchants\obj\Debug\net8.0-windows\win-x64\ref\HighlightMapEnchants.dll
