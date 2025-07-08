@@ -8,3 +8,4 @@ G:\GameHelper-Release-v5.1.6\ExileApi-Compiled-3.24.3.1\ExileApi-Compiled-3.26.0
 G:\GameHelper-Release-v5.1.6\ExileApi-Compiled-3.24.3.1\ExileApi-Compiled-3.26.0.0.0\Plugins\Source\HighlightMapEnchants\obj\Debug\net8.0-windows\HighlightMapEnchants.dll
 G:\GameHelper-Release-v5.1.6\ExileApi-Compiled-3.24.3.1\ExileApi-Compiled-3.26.0.0.0\Plugins\Source\HighlightMapEnchants\obj\Debug\net8.0-windows\refint\HighlightMapEnchants.dll
 G:\GameHelper-Release-v5.1.6\ExileApi-Compiled-3.24.3.1\ExileApi-Compiled-3.26.0.0.0\Plugins\Source\HighlightMapEnchants\obj\Debug\net8.0-windows\ref\HighlightMapEnchants.dll
+G:\GameHelper-Release-v5.1.6\ExileApi-Compiled-3.24.3.1\ExileApi-Compiled-3.26.0.0.0\Plugins\Source\HighlightMapEnchants\obj\Debug\net8.0-windows\HighlightMapEnchants.sourcelink.json

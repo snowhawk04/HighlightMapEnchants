@@ -12,7 +12,8 @@ namespace HighlightMapEnchants;
 public class HighlightMapEnchants : BaseSettingsPlugin<HighlightMapEnchantsSettings>
 {
     private readonly string Einhar = "contain Einhar";
-    private readonly string Harvest = "Sacred Grove";
+    private readonly string Harvest = "contain The Sacred Grove";
+    private readonly string Essence = "contain additional Essences";
 
     public override bool Initialise()
     {
@@ -45,9 +46,9 @@ public class HighlightMapEnchants : BaseSettingsPlugin<HighlightMapEnchantsSetti
                     var enchMods = av.Item.GetComponent<Mods>().EnchantedMods;
                     foreach ( var ench in enchMods )
                     {
-                        if(ench.Translation.Contains(Einhar, System.StringComparison.OrdinalIgnoreCase) )
+                        if ( Settings.ShowBeastEnchant == true && ench.Translation.Contains(Einhar, System.StringComparison.OrdinalIgnoreCase) )
                         {
-                            Color color = new Color(255, 250, 0);
+                            Color color = Settings.BeastHighlightColor;
                             var cell = kiracMissionPanel.GetChildAtIndex(0).GetChildAtIndex(3).GetChildAtIndex(av.PosX);
                             var rect = cell.GetClientRect();
                             
@@ -61,9 +62,25 @@ public class HighlightMapEnchants : BaseSettingsPlugin<HighlightMapEnchantsSetti
                             Graphics.DrawConvexPolyFilled(boxPoints.ToArray(),
                                 color with { A = Color.ToByte((int)((double)0.2f * byte.MaxValue)) });
                         }
-                        else if (ench.Translation.Contains(Harvest, System.StringComparison.OrdinalIgnoreCase))
+                        else if (Settings.ShowHarvestEnchant == true && ench.Translation.Contains(Harvest, System.StringComparison.OrdinalIgnoreCase))
                         {
-                            Color color = new Color(51, 153, 255);
+                            Color color = Settings.HarvestHighlightColor;
+                            var cell = kiracMissionPanel.GetChildAtIndex(0).GetChildAtIndex(3).GetChildAtIndex(av.PosX);
+                            var rect = cell.GetClientRect();
+
+                            var boxPoints = new List<Vector2>();
+                            boxPoints.Add(new Vector2(rect.BottomLeft.X, rect.BottomLeft.Y));
+                            boxPoints.Add(new Vector2(rect.BottomRight.X, rect.BottomRight.Y));
+                            boxPoints.Add(new Vector2(rect.TopRight.X, rect.TopRight.Y));
+                            boxPoints.Add(new Vector2(rect.TopLeft.X, rect.TopLeft.Y));
+                            boxPoints.Add(new Vector2(rect.BottomLeft.X, rect.BottomLeft.Y));
+                            Graphics.DrawPolyLine(boxPoints.ToArray(), color, 2);
+                            Graphics.DrawConvexPolyFilled(boxPoints.ToArray(),
+                                color with { A = Color.ToByte((int)((double)0.2f * byte.MaxValue)) });
+                        }
+                        else if (Settings.ShowCrystalPrisonEnchant == true && ench.Translation.Contains(Essence, System.StringComparison.OrdinalIgnoreCase))
+                        {
+                            Color color = Settings.EssenceHighlightColor;
                             var cell = kiracMissionPanel.GetChildAtIndex(0).GetChildAtIndex(3).GetChildAtIndex(av.PosX);
                             var rect = cell.GetClientRect();
 
