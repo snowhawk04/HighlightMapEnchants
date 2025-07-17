@@ -4,16 +4,87 @@ using ExileCore.PoEMemory.MemoryObjects;
 using SharpDX;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Vector2 = System.Numerics.Vector2;
 
 namespace HighlightMapEnchants;
 
+public class EnchantSettings
+{
+    public string Name { get; set; }
+    public Color Color { get; set; }
+}
+
 public class HighlightMapEnchants : BaseSettingsPlugin<HighlightMapEnchantsSettings>
 {
-    private readonly string Einhar = "contain Einhar";
-    private readonly string Harvest = "contain The Sacred Grove";
-    private readonly string Essence = "contain additional Essences";
+    private List<EnchantSettings> GetSettings()
+    {
+        if (Settings == null || !Settings.Enable)
+            return [];
+
+        var result = new List<EnchantSettings>();
+
+        if (Settings.ShowBreachedMapEnchant)
+        {
+            result.Add(new EnchantSettings { Name = "MapMissionDisplayBreachedMap", Color = Settings.BreachedMapHighlightColor });
+        }
+
+        if (Settings.ShowDemonAbyssEnchant)
+        {
+            result.Add(new EnchantSettings { Name = "MapMissionDisplayDemonAbyss", Color = Settings.DemonAbyssHighlightColor });
+        }
+
+        if (Settings.ShowEssenceExilesEnchant)
+        {
+            result.Add(new EnchantSettings { Name = "MapMissionDisplayEssenceExiles", Color = Settings.EssenceExilesHighlightColor });
+        }
+
+        if (Settings.ShowFlashBreachesEnchant)
+        {
+            result.Add(new EnchantSettings { Name = "MapMissionDisplayFlashBreaches", Color = Settings.FlashBreachesHighlightColor });
+        }
+
+        if (Settings.ShowHarbingerPortalsEnchant)
+        {
+            result.Add(new EnchantSettings { Name = "MapMissionDisplayHarbingerPortals", Color = Settings.HarbingerPortalsHighlightColor });
+        }
+
+        if (Settings.ShowHarvestBeastsEnchant)
+        {
+            result.Add(new EnchantSettings { Name = "MapMissionDisplayHarvestBeasts", Color = Settings.HarvestBeastsHighlightColor });
+        }
+
+        if (Settings.ShowHugeHarvestEnchant)
+        {
+            result.Add(new EnchantSettings { Name = "MapMissionDisplayHugeHarvest", Color = Settings.HugeHarvestHighlightColor });
+        }
+
+        if (Settings.ShowPantheonShrinesEnchant)
+        {
+            result.Add(new EnchantSettings { Name = "MapMissionDisplayPantheonShrines", Color = Settings.PantheonShrinesHighlightColor });
+        }
+
+        if (Settings.ShowPlayerIsHarbingerEnchant)
+        {
+            result.Add(new EnchantSettings { Name = "MapMissionDisplayPlayerIsHarbinger", Color = Settings.PlayerIsHarbingerHighlightColor });
+        }
+
+        if (Settings.ShowReverseIncursionEnchant)
+        {
+            result.Add(new EnchantSettings { Name = "MapMissionDisplayReverseIncursion", Color = Settings.ReverseIncursionHighlightColor });
+        }
+
+        if (Settings.ShowStrongboxChainEnchant)
+        {
+            result.Add(new EnchantSettings { Name = "MapMissionDisplayStrongboxChain", Color = Settings.StrongboxChainHighlightColor });
+        }
+
+        if (Settings.ShowTormentedMonstersEnchant)
+        {
+            result.Add(new EnchantSettings { Name = "MapMissionDisplayTormentedMonsters", Color = Settings.TormentedMonstersHighlightColor });
+        }
+        
+        return result;
+    }
 
     public override bool Initialise()
     {
@@ -22,8 +93,6 @@ public class HighlightMapEnchants : BaseSettingsPlugin<HighlightMapEnchantsSetti
 
     public override void AreaChange(AreaInstance area)
     {
-        //Perform once-per-zone processing here
-        //For example, Radar builds the zone map texture here
     }
 
     public override Job Tick()
@@ -34,71 +103,39 @@ public class HighlightMapEnchants : BaseSettingsPlugin<HighlightMapEnchantsSetti
 
     public override void Render()
     {
-        var kiracMissionPanel = GameController.IngameState.IngameUi.ZanaMissionChoice;
-        var kiracInv = GameController.IngameState.Data.ServerData.NPCInventories.FirstOrDefault();
-        if (kiracMissionPanel != null && kiracMissionPanel.IsValid == true && kiracMissionPanel.IsVisible)
+        var missionPanel = GameController.IngameState.IngameUi.ZanaMissionChoice;
+        var npcInventoryPanel = GameController.IngameState.Data.ServerData.NPCInventories.FirstOrDefault();
+        
+        if (missionPanel is not { IsValid: true, IsVisible: true } || npcInventoryPanel == null) return;
+
+        var inventoryItems = npcInventoryPanel.Inventory.InventorySlotItems.Where(slot => slot != null && slot.Item.HasComponent<Mods>() && slot.Item.GetComponent<Mods>().EnchantedMods.Count > 0);
+
+        foreach ( var inventoryItem in inventoryItems )
         {
-            var avMaps = kiracInv.Inventory.InventorySlotItems;
-            foreach ( var av in avMaps )
+            var enchantedMods = inventoryItem.Item.GetComponent<Mods>().EnchantedMods;
+            foreach ( var enchantedMod in enchantedMods )
             {
-                if ( av != null && av.Item.GetComponent<Mods>() != null && av.Item.GetComponent<Mods>().EnchantedMods.Count > 0)
+                var enchantSettings = GetSettings().FirstOrDefault(x => enchantedMod.RawName.Equals(x.Name, System.StringComparison.OrdinalIgnoreCase));
+
+                if (enchantSettings == null)
+                    continue;
+
+                var color = enchantSettings.Color;
+                var cell = missionPanel.GetChildAtIndex(0).GetChildAtIndex(3).GetChildAtIndex(inventoryItem.PosX);
+                var rect = cell.GetClientRect();
+                var boxPoints = new List<Vector2>
                 {
-                    var enchMods = av.Item.GetComponent<Mods>().EnchantedMods;
-                    foreach ( var ench in enchMods )
-                    {
-                        if ( Settings.ShowBeastEnchant == true && ench.Translation.Contains(Einhar, System.StringComparison.OrdinalIgnoreCase) )
-                        {
-                            Color color = Settings.BeastHighlightColor;
-                            var cell = kiracMissionPanel.GetChildAtIndex(0).GetChildAtIndex(3).GetChildAtIndex(av.PosX);
-                            var rect = cell.GetClientRect();
-                            
-                            var boxPoints = new List<Vector2>();
-                            boxPoints.Add(new Vector2(rect.BottomLeft.X, rect.BottomLeft.Y));
-                            boxPoints.Add(new Vector2(rect.BottomRight.X , rect.BottomRight.Y ));
-                            boxPoints.Add(new Vector2(rect.TopRight.X , rect.TopRight.Y ));
-                            boxPoints.Add(new Vector2(rect.TopLeft.X , rect.TopLeft.Y ));
-                            boxPoints.Add(new Vector2(rect.BottomLeft.X , rect.BottomLeft.Y ));
-                            Graphics.DrawPolyLine(boxPoints.ToArray(), color, 2);
-                            Graphics.DrawConvexPolyFilled(boxPoints.ToArray(),
-                                color with { A = Color.ToByte((int)((double)0.2f * byte.MaxValue)) });
-                        }
-                        else if (Settings.ShowHarvestEnchant == true && ench.Translation.Contains(Harvest, System.StringComparison.OrdinalIgnoreCase))
-                        {
-                            Color color = Settings.HarvestHighlightColor;
-                            var cell = kiracMissionPanel.GetChildAtIndex(0).GetChildAtIndex(3).GetChildAtIndex(av.PosX);
-                            var rect = cell.GetClientRect();
-
-                            var boxPoints = new List<Vector2>();
-                            boxPoints.Add(new Vector2(rect.BottomLeft.X, rect.BottomLeft.Y));
-                            boxPoints.Add(new Vector2(rect.BottomRight.X, rect.BottomRight.Y));
-                            boxPoints.Add(new Vector2(rect.TopRight.X, rect.TopRight.Y));
-                            boxPoints.Add(new Vector2(rect.TopLeft.X, rect.TopLeft.Y));
-                            boxPoints.Add(new Vector2(rect.BottomLeft.X, rect.BottomLeft.Y));
-                            Graphics.DrawPolyLine(boxPoints.ToArray(), color, 2);
-                            Graphics.DrawConvexPolyFilled(boxPoints.ToArray(),
-                                color with { A = Color.ToByte((int)((double)0.2f * byte.MaxValue)) });
-                        }
-                        else if (Settings.ShowCrystalPrisonEnchant == true && ench.Translation.Contains(Essence, System.StringComparison.OrdinalIgnoreCase))
-                        {
-                            Color color = Settings.EssenceHighlightColor;
-                            var cell = kiracMissionPanel.GetChildAtIndex(0).GetChildAtIndex(3).GetChildAtIndex(av.PosX);
-                            var rect = cell.GetClientRect();
-
-                            var boxPoints = new List<Vector2>();
-                            boxPoints.Add(new Vector2(rect.BottomLeft.X, rect.BottomLeft.Y));
-                            boxPoints.Add(new Vector2(rect.BottomRight.X, rect.BottomRight.Y));
-                            boxPoints.Add(new Vector2(rect.TopRight.X, rect.TopRight.Y));
-                            boxPoints.Add(new Vector2(rect.TopLeft.X, rect.TopLeft.Y));
-                            boxPoints.Add(new Vector2(rect.BottomLeft.X, rect.BottomLeft.Y));
-                            Graphics.DrawPolyLine(boxPoints.ToArray(), color, 2);
-                            Graphics.DrawConvexPolyFilled(boxPoints.ToArray(),
-                                color with { A = Color.ToByte((int)((double)0.2f * byte.MaxValue)) });
-                        }
-                    }
-                }
+                    new(rect.BottomLeft.X, rect.BottomLeft.Y),
+                    new(rect.BottomRight.X, rect.BottomRight.Y),
+                    new(rect.TopRight.X , rect.TopRight.Y ),
+                    new(rect.TopLeft.X , rect.TopLeft.Y ),
+                    new(rect.BottomLeft.X , rect.BottomLeft.Y )
+                };
+                Graphics.DrawPolyLine(boxPoints.ToArray(), color, 2);
+                Graphics.DrawConvexPolyFilled(boxPoints.ToArray(), color with { A = Color.ToByte((int)((double)0.2f * byte.MaxValue)) });
+                break;
             }
         }
-        return;
     }
 
     public override void EntityAdded(Entity entity)
